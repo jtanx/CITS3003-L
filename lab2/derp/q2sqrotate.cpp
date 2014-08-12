@@ -17,6 +17,7 @@ vec3 colours[NumVertices] = {
 	vec3(0.2,0,0), vec3(0,0.5,0), vec3(0,0,0.5)
 };
 int Index = 0;
+GLint timeParam;
 
 
 //----------------------------------------------------------------------------
@@ -48,8 +49,10 @@ init( void )
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(points), sizeof(colours), colours );
 
     // Load shaders and use the resulting shader program
-    GLuint program = InitShader( "vshader24.glsl", "fshader24.glsl" );
+    GLuint program = InitShader( "vrotate2d.glsl", "fshader24.glsl" );
     glUseProgram( program );
+
+    timeParam = glGetUniformLocation(program, "time");
 
     // Initialize the vertex position attribute from the vertex shader    
     GLuint vPosition = glGetAttribLocation( program, "vPosition" );
@@ -77,11 +80,19 @@ void
 display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT );
+    glUniform1f(timeParam, glutGet(GLUT_ELAPSED_TIME));
     glDrawArrays( GL_TRIANGLES, 0, NumVertices );
-    glFlush();
+    glutSwapBuffers();
 }
 
 //----------------------------------------------------------------------------
+
+void
+idle(void)
+{
+    glutPostRedisplay();
+}
+
 
 void
 keyboard( unsigned char key, int x, int y )
@@ -110,7 +121,7 @@ int
 main( int argc, char **argv )
 {
     glutInit( &argc, argv );
-    glutInitDisplayMode( GLUT_RGBA );
+    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE );
     glutInitWindowSize( 512, 512 );
     glutInitContextVersion( 3, 2 );
     glutInitContextProfile( GLUT_CORE_PROFILE );
@@ -123,6 +134,7 @@ main( int argc, char **argv )
     glutDisplayFunc( display );
 	glutMouseFunc(mouse);
     glutKeyboardFunc( keyboard );
+    glutIdleFunc(idle);
 
     glutMainLoop();
     return 0;
