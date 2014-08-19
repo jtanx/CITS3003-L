@@ -4,7 +4,7 @@
 #include "Angel.h"
 
 const int NumPoints = 60000;
-GLint sinParam, cosParam;
+GLint multipliers;
 
 //----------------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ void
 init( void )
 {
     vec2 points[NumPoints];
+    vec3 colors[NumPoints];
 
     // Specifiy the vertices for a triangle
     vec2 vertices[3] = {
@@ -28,6 +29,7 @@ init( void )
         // Compute the point halfway between the selected vertex
         //   and the previous point
         points[i] = ( points[i - 1] + vertices[j] ) / 2.0;
+        colors[i] = vec3(1.0*i/NumPoints,0.7*i/NumPoints,0.3);
     }
 
     // Create a vertex array object
@@ -39,20 +41,26 @@ init( void )
     GLuint buffer;
     glGenBuffers( 1, &buffer );
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
-    glBufferData( GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(points)+sizeof(colors), NULL, GL_STATIC_DRAW );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(points), points );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(points), sizeof(colors), colors );
 
     // Load shaders and use the resulting shader program
-    GLuint program = InitShader( "vq2rotate2d.glsl", "fshader21.glsl" );
+    GLuint program = InitShader( "vq3arotate3d.glsl", "fshader24.glsl" );
     glUseProgram( program );
     
-    sinParam = glGetUniformLocation(program, "sinAngle");
-    cosParam = glGetUniformLocation(program, "cosAngle");
+    multipliers = glGetUniformLocation(program, "multipliers");
 
     // Initialize the vertex position attribute from the vertex shader
     GLuint loc = glGetAttribLocation( program, "vPosition" );
     glEnableVertexAttribArray( loc );
     glVertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0,
                            BUFFER_OFFSET(0) );
+                           
+    GLuint vColor = glGetAttribLocation( program, "vColor" );
+    glEnableVertexAttribArray( vColor );
+    glVertexAttribPointer( vColor, 3, GL_FLOAT, GL_FALSE, 0,
+                           BUFFER_OFFSET(sizeof(points)) );
 
     glClearColor( 1.0, 1.0, 1.0, 1.0 ); // white background
 }
@@ -63,11 +71,11 @@ void
 display( void )
 {
     float angle = glutGet(GLUT_ELAPSED_TIME) * 0.001;
+    //Scaling the x-coord performs a horizontal stretch 
+    mat2 multipliers_mat = mat2(vec2(cos(angle), -sin(angle)),
+                                vec2(sin(angle), cos(angle)));
     glClear( GL_COLOR_BUFFER_BIT );     // clear the window
-    glUniform1f(sinParam, sin(angle*2)); //Zoom effect
-    //glUniform1f(sinParam, sin(angle)*0.5); //Nice scaling effect
-    glUniform1f(sinParam, sin(angle)); //Rotate it
-    glUniform1f(cosParam, cos(angle));
+    glUniformMatrix2fv(multipliers, 1, GL_TRUE, multipliers_mat);
     glDrawArrays( GL_POINTS, 0, NumPoints );    // draw the points
     glFlush();
 }

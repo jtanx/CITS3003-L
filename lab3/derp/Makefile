@@ -31,7 +31,7 @@ endif
 
 
 
-CXXINCS = -I../../include
+CXXINCS = -I../../include -g
 CXXFLAGS = $(CXXOPTS) $(CXXDEFS) $(CXXINCS)
 LDFLAGS = $(LDOPTS) $(LDDIRS) $(LDLIBS)
 
