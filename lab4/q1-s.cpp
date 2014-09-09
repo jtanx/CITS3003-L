@@ -81,15 +81,15 @@ void
 display( void )
 {
     float angle = glutGet(GLUT_ELAPSED_TIME) * 0.001;
-    mat3 xTransform = mat3(1.0,        0.0,         0.0,
-	                       0.0, cos(angle), -sin(angle),
-	                       0.0, sin(angle),  cos(angle) );
-	mat3 yTransform = mat3(cos(angle), 0, sin(angle),
-	                       0, 1, 0,
-	                       -sin(angle), 0, cos(angle));
-	mat3 zTransform = mat3(cos(angle), -sin(angle), 0,
-	                       sin(angle), cos(angle), 0,
-	                       0, 0, 1);
+    mat3 xTransform = mat3(vec3(1.0,        0.0,         0.0),
+	                       vec3(0.0, cos(angle), -sin(angle)),
+	                       vec3(0.0, sin(angle),  cos(angle)) );
+	mat3 yTransform = mat3(vec3(cos(angle), 0, sin(angle)),
+	                       vec3(0, 1, 0),
+	                       vec3(-sin(angle), 0, cos(angle)));
+	mat3 zTransform = mat3(vec3(cos(angle), -sin(angle), 0),
+	                       vec3(sin(angle), cos(angle), 0),
+	                       vec3(0, 0, 1));
     glClear( GL_COLOR_BUFFER_BIT );
     glUniformMatrix3fv(multipliers, 1, GL_TRUE, yTransform);
     glDrawArrays( GL_TRIANGLES, 0, NumVertices );

@@ -8,25 +8,23 @@ using namespace std;
 const int NumTriangles = 12;  // 3^5 triangles generated
 const int NumVertices = NumTriangles * 3;
 vec4 points[NumVertices] = {
-   vec4( -0.5, -0.5,  0.5, 1.0 ), vec4(  0.5, -0.5,  0.5, 1.0 ), vec4( -0.5,  0.5, 0.5, 1.0 ),
-   vec4(  0.5,  0.5,  0.5, 1.0 ), vec4( -0.5,  0.5,  0.5, 1.0 ), vec4(  0.5, -0.5, 0.5, 1.0 ),
-   
-   
-   vec4( -0.5, -0.5,  0.5, 1.0 ), vec4(  0.5, -0.5,  0.5, 1.0 ), vec4( -0.5,  0.5, 0.5, 1.0 ),
-   vec4(  0.5,  0.5,  0.5, 1.0 ), vec4( -0.5,  0.5,  0.5, 1.0 ), vec4(  0.5, -0.5, 0.5, 1.0 ),
-   
-   vec4( -0.5, -0.5,  0.5, 1.0 ), vec4(  0.5, -0.5,  0.5, 1.0 ), vec4( -0.5,  0.5, 0.5, 1.0 ),
-   vec4(  0.5,  0.5,  0.5, 1.0 ), vec4( -0.5,  0.5,  0.5, 1.0 ), vec4(  0.5, -0.5, 0.5, 1.0 ),
-   
-   vec4( -0.5, -0.5,  0.5, 1.0 ), vec4(  0.5, -0.5,  0.5, 1.0 ), vec4( -0.5,  0.5, 0.5, 1.0 ),
-   vec4(  0.5,  0.5,  0.5, 1.0 ), vec4( -0.5,  0.5,  0.5, 1.0 ), vec4(  0.5, -0.5, 0.5, 1.0 ),
-   
-   vec4( -0.5, -0.5,  0.5, 1.0 ), vec4(  0.5, -0.5,  0.5, 1.0 ), vec4( -0.5,  0.5, 0.5, 1.0 ),
-   vec4(  0.5,  0.5,  0.5, 1.0 ), vec4( -0.5,  0.5,  0.5, 1.0 ), vec4(  0.5, -0.5, 0.5, 1.0 ),
-   
-   vec4( -0.5, -0.5,  0.5, 1.0 ), vec4(  0.5, -0.5,  0.5, 1.0 ), vec4( -0.5,  0.5, 0.5, 1.0 ),
-   vec4(  0.5,  0.5,  0.5, 1.0 ), vec4( -0.5,  0.5,  0.5, 1.0 ), vec4(  0.5, -0.5, 0.5, 1.0 ),
+   vec4( -0.5, -0.5,  0.5,  1.0 ), vec4(  0.5, -0.5,  0.5,  1.0 ), vec4( -0.5,  0.5, 0.5,  1.0 ),
+   vec4(  0.5,  0.5,  0.5,  1.0 ), vec4( -0.5,  0.5,  0.5,  1.0 ), vec4(  0.5, -0.5, 0.5,  1.0 ),
 
+   vec4( -0.5, -0.5, -0.5,  1.0 ), vec4(  0.5, -0.5, -0.5,  1.0 ), vec4( -0.5,  0.5, -0.5,  1.0 ),
+   vec4(  0.5,  0.5, -0.5,  1.0 ), vec4( -0.5,  0.5, -0.5,  1.0 ), vec4(  0.5, -0.5, -0.5,  1.0 ),
+
+   vec4(  0.5, -0.5, -0.5,  1.0 ), vec4(  0.5,  0.5, -0.5,  1.0 ), vec4(  0.5, -0.5,  0.5,  1.0 ),
+   vec4(  0.5,  0.5,  0.5,  1.0 ), vec4(  0.5, -0.5,  0.5,  1.0 ), vec4(  0.5,  0.5, -0.5,  1.0 ),
+
+   vec4( -0.5, -0.5, -0.5,  1.0 ), vec4( -0.5,  0.5, -0.5,  1.0 ), vec4( -0.5, -0.5,  0.5,  1.0 ),
+   vec4( -0.5,  0.5,  0.5,  1.0 ), vec4( -0.5, -0.5,  0.5,  1.0 ), vec4( -0.5,  0.5, -0.5,  1.0 ),
+
+   vec4( -0.5,  0.5, -0.5,  1.0 ), vec4( -0.5,  0.5,  0.5,  1.0 ), vec4(  0.5,  0.5, -0.5,  1.0 ),
+   vec4(  0.5,  0.5,  0.5,  1.0 ), vec4(  0.5,  0.5, -0.5,  1.0 ), vec4( -0.5,  0.5,  0.5,  1.0 ),
+
+   vec4( -0.5, -0.5, -0.5,  1.0 ), vec4( -0.5, -0.5,  0.5,  1.0 ), vec4(  0.5, -0.5, -0.5,  1.0 ),
+   vec4(  0.5, -0.5,  0.5,  1.0 ), vec4(  0.5, -0.5, -0.5,  1.0 ), vec4( -0.5, -0.5,  0.5,  1.0 ),
 };
 
 vec3 colours[NumVertices] = {
@@ -113,26 +111,10 @@ init( void )
 void
 display( void )
 {
-    float angle = glutGet(GLUT_ELAPSED_TIME) * 0.001;
-    mat4 xTransform = mat4(vec4(1.0,        0.0,         0.0, 0.0),
-	                       vec4(0.0, cos(angle), -sin(angle), 0.0),
-	                       vec4(0.0, sin(angle),  cos(angle), 0.0 ),
-	                       vec4(0.0, 0.0, 0.0, 1.0));
-	mat4 yTransform = mat4(vec4(cos(angle), 0, sin(angle), 0.0),
-	                       vec4(0, 1, 0, 0.0),
-	                       vec4(-sin(angle), 0, cos(angle), 0.0),
-	                       vec4(0.0, 0.0, 0.0, 1.0));
-	mat4 zTransform = mat4(vec4(cos(angle), -sin(angle), 0, 0.0),
-	                       vec4(sin(angle), cos(angle), 0, 0.0),
-	                       vec4(0, 0, 1, 0.0),
-	                       vec4(0.0, 0.0, 0.0, 1.0));
-	mat4 shrinkX =
-        mat4( vec4(0.25, 0.0, 0.0, 0.0),
-              vec4(0.0,  1.0, 0.0, 0.0),
-              vec4(0.0,  0.0, 1.0, 0.0),
-              vec4(0.0, 0.0, 0.0, 1.0)  );
+    float angle = glutGet(GLUT_ELAPSED_TIME) * 0.001 * 180.0/3.141592654;
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUniformMatrix4fv(multipliers, 1, GL_FALSE, xTransform * yTransform * shrinkX);
+    glUniformMatrix4fv(multipliers, 1, GL_TRUE, RotateX(angle) * RotateY(angle) * Scale(0.25, 1.0, 1.0));
     glDrawArrays( GL_TRIANGLES, 0, NumVertices );
     
     //glUniformMatrix3fv(multipliers, 1, GL_FALSE, zTransform);
